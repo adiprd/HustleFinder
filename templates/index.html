@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HustleFinder - Find Your Perfect Side Gig</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8B5CF6;
+            --primary-dark: #7C3AED;
+            --secondary: #06D6A0;
+            --accent: #FF6B6B;
+            --dark: #1E293B;
+            --light: #F8FAFC;
+            --gray: #64748B;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #FFD89B, #19547B);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        
+        .assessment-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin: 40px auto;
+            max-width: 800px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .skill-chip {
+            background: var(--light);
+            border: 2px solid #E2E8F0;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .skill-chip.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .input-field {
+            flex: 1;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #E2E8F0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+        }
+        
+        .results-section {
+            display: none;
+            margin-top: 40px;
+        }
+        
+        .hustle-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .hustle-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .match-badge {
+            background: var(--secondary);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .trend-score {
+            background: var(--accent);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        
+        .business-plan {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .plan-step {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>🎯 HustleFinder</h1>
+            <p>Discover Your Perfect Side Hustle Based on Your Skills & Goals</p>
+        </div>
+
+        <div class="assessment-card">
+            <h2 style="text-align: center; margin-bottom: 30px; color: var(--dark);">Let's Find Your Perfect Side Gig</h2>
+            
+            <div class="form-group">
+                <label>What are your skills? (Select all that apply)</label>
+                <div class="skills-grid" id="skillsGrid">
+                    <!-- Skills will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="input-group">
+                <div class="input-field">
+                    <label>Weekly Hours Available</label>
+                    <select id="weeklyHours">
+                        <option value="5">5 hours</option>
+                        <option value="10" selected>10 hours</option>
+                        <option value="15">15 hours</option>
+                        <option value="20">20+ hours</option>
+                    </select>
+                </div>
+                <div class="input-field">
+                    <label>Monthly Income Goal ($)</label>
+                    <input type="number" id="incomeGoal" value="1000" min="100" max="10000">
+                </div>
+            </div>
+
+            <button class="btn pulse" onclick="assessSkills()">
+                <i class="fas fa-rocket"></i> Find My Side Hustles
+            </button>
+        </div>
+
+        <div class="results-section" id="resultsSection">
+            <h2 style="text-align: center; margin-bottom: 30px; color: white;">Your Personalized Side Hustle Matches</h2>
+            <div id="matchesContainer"></div>
+        </div>
+
+        <div class="business-plan" id="businessPlan">
+            <h2 style="text-align: center; margin-bottom: 20px;">Your Business Plan</h2>
+            <div id="planContent"></div>
+        </div>
+    </div>
+
+    <script>
+        const skills = {{ skills|tojson }};
+        let selectedSkills = [];
+        
+        // Populate skills grid
+        const skillsGrid = document.getElementById('skillsGrid');
+        skills.forEach(skill => {
+            const chip = document.createElement('div');
+            chip.className = 'skill-chip';
+            chip.textContent = skill;
+            chip.onclick = () => toggleSkill(skill, chip);
+            skillsGrid.appendChild(chip);
+        });
+        
+        function toggleSkill(skill, element) {
+            const index = selectedSkills.indexOf(skill);
+            if (index === -1) {
+                selectedSkills.push(skill);
+                element.classList.add('selected');
+            } else {
+                selectedSkills.splice(index, 1);
+                element.classList.remove('selected');
+            }
+        }
+        
+        function assessSkills() {
+            const weeklyHours = document.getElementById('weeklyHours').value;
+            const incomeGoal = document.getElementById('incomeGoal').value;
+            
+            if (selectedSkills.length === 0) {
+                alert('Please select at least one skill!');
+                return;
+            }
+            
+            fetch('/assess', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    skills: selectedSkills,
+                    weekly_hours: parseInt(weeklyHours),
+                    target_income: parseInt(incomeGoal)
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                displayMatches(data.matches);
+            });
+        }
+        
+        function displayMatches(matches) {
+            const container = document.getElementById('matchesContainer');
+            const resultsSection = document.getElementById('resultsSection');
+            
+            container.innerHTML = '';
+            resultsSection.style.display = 'block';
+            
+            matches.forEach(match => {
+                const card = document.createElement('div');
+                card.className = 'hustle-card';
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: between; align-items: start; margin-bottom: 15px;">
+                        <h3 style="margin: 0; color: var(--dark);">${match.title}</h3>
+                        <div>
+                            <span class="match-badge">${match.match_score}% Match</span>
+                            <span class="trend-score">Trend: ${match.trend_score}</span>
+                        </div>
+                    </div>
+                    <p style="color: var(--gray); margin-bottom: 15px;">${match.description}</p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px;">
+                        <div>
+                            <strong>💰 Earnings:</strong><br>
+                            $${match.earning_potential.low} - $${match.earning_potential.high}/mo
+                        </div>
+                        <div>
+                            <strong>⏱️ Time:</strong><br>
+                            ${match.time_commitment}
+                        </div>
+                        <div>
+                            <strong>💸 Startup:</strong><br>
+                            ${match.startup_cost}
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>✅ Your Matching Skills:</strong> ${match.matching_skills.join(', ')}
+                    </div>
+                    <button class="btn" onclick="generatePlan(${match.id})" style="width: auto; padding: 10px 20px;">
+                        Generate Business Plan
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+            
+            // Scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function generatePlan(hustleId) {
+            fetch('/generate_plan', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ hustle_id: hustleId })
+            })
+            .then(r => r.json())
+            .then(data => {
+                displayBusinessPlan(data.business_plan);
+            });
+        }
+        
+        function displayBusinessPlan(plan) {
+            const planSection = document.getElementById('businessPlan');
+            const planContent = document.getElementById('planContent');
+            
+            planContent.innerHTML = `
+                <h3 style="text-align: center; margin-bottom: 20px;">${plan.hustle.title}</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 25px;">
+                    <div class="plan-step">
+                        <strong>📅 Timeline</strong><br>
+                        ${plan.timeline.months_to_profit} months to profit<br>
+                        ${plan.timeline.weekly_hours} hours/week
+                    </div>
+                    <div class="plan-step">
+                        <strong>💰 Projections</strong><br>
+                        Month 1: $${plan.financial_projections.month_1_income}<br>
+                        Month 6: $${plan.financial_projections.month_6_income}
+                    </div>
+                </div>
+                
+                <h4 style="margin-bottom: 15px;">🎯 Action Steps</h4>
+                ${plan.action_steps.map(step => `
+                    <div class="plan-step">
+                        <i class="fas fa-check-circle" style="margin-right: 10px;"></i>${step}
+                    </div>
+                `).join('')}
+                
+                <div style="text-align: center; margin-top: 25px;">
+                    <button class="btn" onclick="startHustle()" style="width: auto;">
+                        <i class="fas fa-play"></i> Start This Hustle
+                    </button>
+                </div>
+            `;
+            
+            planSection.style.display = 'block';
+            planSection.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function startHustle() {
+            alert('🚀 Amazing! Your side hustle journey begins now! Check your generated plan above and start taking action today!');
+        }
+    </script>
+</body>
+</html>
